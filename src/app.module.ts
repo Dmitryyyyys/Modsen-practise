@@ -6,9 +6,10 @@ import { UsersModule } from './users/users.module';
 import { PostModule } from './post/post.module';
 import { CommentsModule } from './comments/comments.module';
 import { AuthModule } from './auth/auth.module';
-
+import { ConfigModule } from '@nestjs/config';
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal:true}),
     TypeOrmModule.forRoot({
 type:'postgres',
 host:'192.168.1.141',
