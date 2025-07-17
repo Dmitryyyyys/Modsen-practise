@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from './post.entity';
 import { Repository } from 'typeorm';
 import {  NotFoundException } from '@nestjs/common';
+import { ILike } from 'typeorm';
 @Injectable()
 export class PostService {
     constructor(
@@ -31,5 +32,20 @@ return updated;
 }
 async remove(id: string): Promise<void>{
     await this.postRepo.delete(id);
+}
+async searchPosts(query: string): Promise<Post[]>{
+return this.postRepo.find({
+    where: [
+{title: ILike(`%${query}%`)},
+{description: ILike(`%${query}%`)},
+    ],
+});
+}
+async sortPostsByDate(order: 'asc' | 'desc' = 'desc'): Promise<Post[]>{
+    return this.postRepo.find({
+        order: {
+            createdAt: order.toUpperCase() as 'ASC' | 'DESC',
+        },
+    });
 }
 }
